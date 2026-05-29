@@ -4,6 +4,44 @@
 @section('subtitle', 'Gerencie suas informações pessoais')
 
 @section('content')
+
+{{-- Avisos de sucesso/erro --}}
+@if (session('status') === 'profile-updated')
+    <div id="toast-profile" class="mb-4 p-4 bg-green-100 text-green-800 rounded-xl border border-green-200 flex items-center gap-2 text-sm">
+        <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        Perfil atualizado com sucesso!
+    </div>
+@endif
+
+@if (session('status') === 'password-updated')
+    <div id="toast-password" class="mb-4 p-4 bg-green-100 text-green-800 rounded-xl border border-green-200 flex items-center gap-2 text-sm">
+        <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        Senha alterada com sucesso!
+    </div>
+@endif
+
+@if ($errors->updatePassword->any())
+    <div id="toast-err-password" class="mb-4 p-4 bg-red-100 text-red-800 rounded-xl border border-red-200 flex items-center gap-2 text-sm">
+        <svg class="w-5 h-5 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        Erro ao alterar senha. Verifique os campos e tente novamente.
+    </div>
+@endif
+
+@if ($errors->any() && !$errors->updatePassword->any() && !$errors->userDeletion->any())
+    <div id="toast-err-profile" class="mb-4 p-4 bg-red-100 text-red-800 rounded-xl border border-red-200 flex items-center gap-2 text-sm">
+        <svg class="w-5 h-5 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        Erro ao salvar perfil. Verifique os campos e tente novamente.
+    </div>
+@endif
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
     {{-- Coluna esquerda --}}
@@ -64,6 +102,7 @@
                     <input type="password" name="password"
                            class="block w-full px-4 py-2 border border-slate-200 rounded-lg bg-slate-50 text-slate-900 focus:ring-red-500 focus:border-red-500"
                            placeholder="••••••••">
+                    @error('password', 'userDeletion') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
                 <button type="submit"
                         onclick="return confirm('Tem certeza? Esta ação não pode ser desfeita!')"
@@ -95,7 +134,7 @@
                             <svg id="eyeoff_c" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
                         </button>
                     </div>
-                    @error('current_password') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                    @error('current_password', 'updatePassword') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Nova Senha</label>
@@ -111,7 +150,7 @@
                             <svg id="eyeoff_n" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
                         </button>
                     </div>
-                    @error('password') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                    @error('password', 'updatePassword') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">Confirmar Nova Senha</label>
@@ -154,5 +193,11 @@ function togglePass(inputId, eyeId, eyeOffId) {
         eyeOff.classList.add('hidden');
     }
 }
+
+// Auto-hide dos avisos após 4 segundos
+['toast-profile', 'toast-password', 'toast-err-password', 'toast-err-profile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) setTimeout(() => el.style.display = 'none', 4000);
+});
 </script>
 @endsection
