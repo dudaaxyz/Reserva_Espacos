@@ -11,10 +11,11 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader \
     && npm install \
     && npm run build \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && mkdir -p /run/nginx
 
 COPY nginx-render.conf /etc/nginx/http.d/default.conf
 
 EXPOSE 8080
 
-CMD sh -c "php artisan config:clear && php artisan migrate --force && php artisan storage:link && php-fpm -D && nginx -g 'daemon off;'"
+CMD sh -c "php-fpm -D && sleep 2 && nginx -g 'daemon off;'"
