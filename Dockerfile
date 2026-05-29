@@ -1,21 +1,25 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.3-apache
 
-RUN apk add --no-cache nginx nodejs npm postgresql-dev \
-    && docker-php-ext-install pdo pdo_pgsql
+RUN apt-get update && apt-get install -y \
+    libpq-dev nodejs npm \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && a2enmod rewrite
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+WORKDIR /var/www/html
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader \
     && npm install \
     && npm run build \
     && chmod -R 775 storage bootstrap/cache \
-    && mkdir -p /run/nginx
+    && chown -R www-data:www-data storage bootstrap/cache
 
-COPY nginx-render.conf /etc/nginx/http.d/default.conf
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 
-EXPOSE 8080
+RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
-CMD sh -c "php-fpm -D && sleep 2 && nginx -g 'daemon off;'"
+EXPOSE 80
+
+CMD sh -c "php artisan config:clear && php artisan migrate --force && php artisan storage:link && apache2-foreground"
