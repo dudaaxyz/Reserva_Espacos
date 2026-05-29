@@ -26,12 +26,19 @@ class ReservationController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'space_id'   => 'required|exists:spaces,id',
-            'start_time' => 'required|date|after:now',
-            'end_time'   => 'required|date|after:start_time',
-            'notes'      => 'nullable|string',
-        ]);
+       $request->validate([
+    'space_id'   => 'required|exists:spaces,id',
+    'start_time' => 'required|date|after:now',
+    'end_time'   => 'required|date|after:start_time',
+    'notes'      => 'nullable|string',
+], [
+    'space_id.required'   => 'Selecione um espaço.',
+    'space_id.exists'     => 'O espaço selecionado não existe.',
+    'start_time.required' => 'Informe a data e hora de início.',
+    'start_time.after'    => 'A data de início deve ser no futuro.',
+    'end_time.required'   => 'Informe a data e hora de fim.',
+    'end_time.after'      => 'A data de fim deve ser após a data de início.',
+]);
 
         $conflict = Reservation::where('space_id', $request->space_id)
             ->where('status', '!=', 'cancelled')
