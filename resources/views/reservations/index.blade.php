@@ -24,9 +24,9 @@
 @else
 
 @php
-    $ativas     = $reservations->where('status', 'Confirmada');
-    $canceladas = $reservations->where('status', 'Cancelada');
-    $pendentes  = $reservations->whereNotIn('status', ['Confirmada', 'Cancelada']);
+    $ativas     = $reservations->where('status', 'confirmed');
+    $canceladas = $reservations->where('status', 'cancelled');
+    $pendentes  = $reservations->whereNotIn('status', ['confirmed', 'cancelled']);
 @endphp
 
 {{-- Abas --}}
@@ -145,7 +145,6 @@
     </div>
 </div>
 
-{{-- Tabela Pendentes --}}
 @if($pendentes->count() > 0)
 <div id="tab-pendentes" class="hidden">
     <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
@@ -221,7 +220,6 @@
     let formAtivo = null;
 
     function mostrarAba(aba) {
-        // Esconde todas as tabs
         ['ativas', 'canceladas', 'pendentes'].forEach(t => {
             const tab = document.getElementById('tab-' + t);
             const btn = document.getElementById('aba-' + t);
@@ -232,7 +230,6 @@
             }
         });
 
-        // Mostra a aba selecionada
         const tabAtiva = document.getElementById('tab-' + aba);
         const btnAtivo = document.getElementById('aba-' + aba);
         if (tabAtiva) tabAtiva.classList.remove('hidden');
