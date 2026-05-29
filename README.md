@@ -1,58 +1,237 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏢 Reserva de Espaços
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema web desenvolvido para gerenciamento e reserva de salas, laboratórios e ambientes compartilhados, permitindo que usuários realizem agendamentos de forma rápida, organizada e segura.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+##  Sobre o Projeto
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+O **Reserva de Espaços** foi desenvolvido com o objetivo de facilitar o controle de reservas de ambientes compartilhados, permitindo que usuários consultem a disponibilidade dos espaços e realizem agendamentos de forma eficiente.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+O sistema possui controle de acesso por usuários e administradores, garantindo maior organização e gerenciamento das reservas.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+##  Tecnologias Utilizadas
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* PHP 8.3+
+* Laravel 12
+* PostgreSQL
+* HTML5
+* CSS3
+* Tailwind CSS
+* JavaScript
+* Vite
+* Composer
+* Node.js
+* Git
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+##  Funcionalidades
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+###  Usuários
+
+* Cadastro e autenticação de usuários.
+* Login seguro.
+* Visualização das próprias reservas.
+* Consulta de espaços disponíveis.
+
+###  Reservas
+
+* Criação de reservas.
+* Cancelamento de reservas.
+* Consulta de disponibilidade.
+* Visualização de reservas realizadas.
+
+###  Espaços
+
+* Listagem de salas e ambientes.
+* Informações detalhadas dos espaços.
+* Controle de disponibilidade por data e horário.
+
+###  Administração
+
+* Gerenciamento de usuários.
+* Gerenciamento de espaços.
+* Visualização de todas as reservas.
+* Controle de permissões administrativas.
+
+###  Sistema
+
+* Interface responsiva.
+* Validação de formulários.
+* Integração com PostgreSQL.
+* Arquitetura MVC utilizando Laravel.
+
+---
+
+##  Pré-requisitos
+
+Antes de executar o projeto, certifique-se de possuir os seguintes softwares instalados:
+
+* PHP 8.3 ou superior
+* Composer
+* Node.js
+* NPM
+* PostgreSQL
+* Git
+
+---
+
+##  Instalação
+
+### 1. Clonar o repositório
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/seu-usuario/reserva-espacos.git
+cd reserva-espacos
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Instalar dependências do PHP
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Instalar dependências do Frontend
 
-## Code of Conduct
+```bash
+npm install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Configurar o ambiente
 
-## Security Vulnerabilities
+Copie o arquivo de configuração:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+```
 
-## License
+Gere a chave da aplicação:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan key:generate
+```
+
+---
+
+##  Configuração do Banco de Dados
+
+Configure as credenciais do PostgreSQL no arquivo `.env`:
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=reserva_espacos
+DB_USERNAME=postgres
+DB_PASSWORD=sua_senha
+```
+
+---
+
+##  Executar as Migrations
+
+```bash
+php artisan migrate
+```
+
+---
+
+##  Criar Usuário Administrador
+
+Abra o Tinker:
+
+```bash
+php artisan tinker
+```
+
+Execute:
+
+```php
+App\Models\User::create([
+    "name" => "Admin",
+    "email" => "admin@reserva.com",
+    "password" => bcrypt("admin123"),
+    "is_admin" => true
+]);
+```
+
+---
+
+##  Executando o Projeto
+
+### Iniciar o Frontend
+
+```bash
+npm run dev
+```
+
+> Mantenha este terminal em execução.
+
+### Iniciar o Backend
+
+Abra um novo terminal e execute:
+
+```bash
+php artisan serve
+```
+
+---
+
+##  Acesso ao Sistema
+
+Após iniciar os serviços, acesse:
+
+```text
+http://localhost:8000
+```
+
+---
+
+##  Credenciais de Administrador
+
+```text
+E-mail: admin@reserva.com
+Senha: admin123
+```
+
+---
+
+##  Estrutura do Projeto
+
+```text
+app/
+bootstrap/
+config/
+database/
+public/
+resources/
+routes/
+storage/
+tests/
+```
+
+---
+
+##  Equipe de Desenvolvimento
+
+| Integrante                     | Matrícula|
+| ------------------------------ | -------- |
+| Maria Eduarda Cardoso Ferreira | 0172454  |
+| Guilherme Oliveira Ribeiro     | 01606196 |
+| Matheus Wendell de Paula Souza | 01602509 |
+| Matheus Felix Gomes            | 01670143 |
+
+---
+
+##  Projeto Acadêmico
+
+Projeto desenvolvido como atividade acadêmica do curso de Ciência da Computação, aplicando conceitos de desenvolvimento web, banco de dados, engenharia de software e arquitetura MVC.
+
+---
+
+## 📄 Licença
+
+Este projeto foi desenvolvido para fins acadêmicos e educacionais.
