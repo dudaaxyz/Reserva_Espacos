@@ -34,7 +34,7 @@ class ReservationController extends Controller
         ]);
 
         $conflict = Reservation::where('space_id', $request->space_id)
-            ->where('status', '!=', 'Cancelada')
+            ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($request) {
                 $query->whereBetween('start_time', [$request->start_time, $request->end_time])
                       ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
@@ -55,7 +55,7 @@ class ReservationController extends Controller
             'space_id'   => $request->space_id,
             'start_time' => $request->start_time,
             'end_time'   => $request->end_time,
-            'status'     => 'Confirmada',
+            'status'     => 'confirmed',
             'notes'      => $request->notes,
         ]);
 
@@ -73,7 +73,7 @@ class ReservationController extends Controller
             abort(403);
         }
 
-        $reservation->update(['status' => 'Cancelada']);
+        $reservation->update(['status' => 'cancelled']);
         return redirect()->route('reservations.index')->with('success', 'Reserva cancelada com sucesso!');
     }
 
