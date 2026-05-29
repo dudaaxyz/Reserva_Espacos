@@ -19,8 +19,8 @@ Route::get('/dashboard', function () {
         'totalSpaces'        => \App\Models\Space::where('is_active', true)->count(),
         'myReservations'     => \App\Models\Reservation::where('user_id', $user->id)->count(),
         'activeReservations' => $user->is_admin
-            ? \App\Models\Reservation::where('status', 'Confirmada')->count()
-            : \App\Models\Reservation::where('user_id', $user->id)->where('status', 'Confirmada')->count(),
+            ? \App\Models\Reservation::where('status', 'confirmed')->count()
+            : \App\Models\Reservation::where('user_id', $user->id)->where('status', 'confirmed')->count(),
         'totalReservations'  => \App\Models\Reservation::count(),
         'spaces'             => \App\Models\Space::where('is_active', true)->latest()->take(5)->get(),
         'recentReservations' => \App\Models\Reservation::with('space')->where('user_id', $user->id)->latest()->take(5)->get(),
@@ -28,7 +28,7 @@ Route::get('/dashboard', function () {
 
     if ($user->is_admin) {
         $data['allReservations']        = \App\Models\Reservation::with(['space', 'user'])->latest()->take(8)->get();
-        $data['activeReservationsList'] = \App\Models\Reservation::with(['space', 'user'])->where('status', 'Confirmada')->get();
+        $data['activeReservationsList'] = \App\Models\Reservation::with(['space', 'user'])->where('status', 'confirmed')->get();
         $data['totalUsers']             = \App\Models\User::count();
         $data['users']                  = \App\Models\User::all();
     }
@@ -41,7 +41,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Espaços
     Route::get('/spaces', [SpaceController::class, 'index'])->name('spaces.index');
     Route::get('/spaces/create', [SpaceController::class, 'create'])->name('spaces.create')->middleware('can:admin');
     Route::get('/spaces/{space}', [SpaceController::class, 'show'])->name('spaces.show');
@@ -53,7 +52,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/spaces/{space}', [SpaceController::class, 'destroy'])->name('spaces.destroy');
     });
 
-    // Reservas
     Route::resource('reservations', ReservationController::class);
 });
 
