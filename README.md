@@ -12,7 +12,7 @@ O sistema possui controle de acesso por usuários e administradores, garantindo 
 
 ---
 
-##  Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 * PHP 8.3+
 * Laravel 12
