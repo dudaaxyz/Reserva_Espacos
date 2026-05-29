@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login — Reserva de Espaços</title>
-    <link rel="stylesheet" href="/build/assets/app-DXFxPLOv.css">
-<script src="/build/assets/app-MvBNrVg4.js" defer></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-slate-50 font-sans">
     <div class="flex h-screen w-full">
